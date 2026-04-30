@@ -23,8 +23,11 @@ pipeline {
 
         stage('SonarQube Analysis') {
     steps {
-        withSonarQubeEnv('SonarQube-Server') {
-            bat '"%SONAR_SCANNER_HOME%\\bin\\sonar-scanner.bat"'
+        script {
+            def scannerHome = tool 'SonarScanner'
+            withSonarQubeEnv('SonarQube-Server') {
+                bat "${scannerHome}\\bin\\sonar-scanner.bat"
+            }
         }
     }
 }
