@@ -22,12 +22,12 @@ pipeline {
         }
 
         stage('SonarQube Analysis') {
-            steps {
-                withSonarQubeEnv('SonarQube-Server') {
-                    bat 'sonar-scanner'
-                }
-            }
+    steps {
+        withSonarQubeEnv('SonarQube-Server') {
+            bat '"%SONAR_SCANNER_HOME%\\bin\\sonar-scanner.bat"'
         }
+    }
+}
 
         stage('Quality Gate') {
             steps {
