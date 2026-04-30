@@ -16,6 +16,13 @@ app.get("/api/courses", (req, res) => {
   });
 });
 
+app.get('/api/health', (req, res) => {
+    res.json({
+        status: 'healthy',
+        service: 'AUPP LMS API'
+    });
+});
+
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`AUPP LMS API running on port ${PORT}`);
 });
