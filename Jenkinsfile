@@ -77,5 +77,20 @@ pipeline {
                 }
             }
         }
+                stage('Deploy to EC2') {
+            steps {
+                script {
+                    def ip = readFile('terraform/public_ip.txt').trim()
+
+                    bat 'docker save %IMAGE_NAME% -o aupp-lms-api.tar'
+
+                    bat "scp -i C:\\jenkins-keys\\aupp-lms-key -o StrictHostKeyChecking=no aupp-lms-api.tar ubuntu@${ip}:/home/ubuntu/"
+
+                    bat """
+                    ssh -i C:\\jenkins-keys\\aupp-lms-key -o StrictHostKeyChecking=no ubuntu@${ip} "sudo docker load -i /home/ubuntu/aupp-lms-api.tar && sudo docker stop aupp-lms-container || true && sudo docker rm aupp-lms-container || true && sudo docker run -d -p 3000:3000 --name aupp-lms-container aupp-lms-api"
+                    """
+                }
+            }
+        }
     }
 }
